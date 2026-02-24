@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STORE AHMED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #f5c842;
+            --gold-light: #ffe88a;
+            --dark: #080c14;
+            --dark2: #0d1526;
+            --card-bg: rgba(255,255,255,0.04);
+            --blue-neon: #4fa3ff;
+            --green: #22d87e;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--dark);
+            color: #e8eaf0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ─── Animated background ─── */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(79,163,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79,163,255,0.04) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 700px; height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(79,163,255,0.08) 0%, transparent 70%);
+            top: -200px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+            pointer-events: none;
+            animation: glowPulse 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            from { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            to   { opacity: 1;   transform: translateX(-50%) scale(1.15); }
+        }
+
+        /* ─── Header ─── */
+        header {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 70px 20px 50px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .avatar-ring {
+            position: relative;
+            width: 140px; height: 140px;
+            margin: 0 auto 30px;
+        }
+
+        .avatar-ring::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 50%;
+            background: conic-gradient(var(--gold), var(--blue-neon), var(--green), var(--gold));
+            animation: spin 4s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .avatar-ring::after {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            background: conic-gradient(rgba(245,200,66,0.2), transparent, rgba(79,163,255,0.2), transparent);
+            animation: spin 8s linear infinite reverse;
+            z-index: 0;
+        }
+
+        .profile-img {
+            width: 140px; height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+            border: 4px solid var(--dark);
+            display: block;
+        }
+
+        /* ─── Animated store name ─── */
+        .store-name {
+            font-family: 'Unbounded', sans-serif;
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            font-weight: 900;
+            letter-spacing: 4px;
+            line-height: 1.1;
+            margin-bottom: 14px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .store-name .word-ahmed {
+            display: inline-block;
+            color: white;
+            animation: fadeSlideDown 0.8s ease both;
+        }
+
+        .store-name .word-store {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeSlideDown 0.8s 0.2s ease both, shimmer 3s 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes fadeSlideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* blinking cursor after name */
+        .store-name::after {
+            content: '|';
+            color: var(--gold);
+            margin-right: 4px;
+            animation: blink 1s step-end infinite;
+            font-weight: 300;
+        }
+
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        .subtitle {
+            font-size: 1em;
+            color: rgba(255,255,255,0.5);
+            max-width: 450px;
+            margin: 0 auto;
+            animation: fadeSlideDown 0.8s 0.5s ease both;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        /* badge */
+        .badge {
+            display: inline-block;
+            background: rgba(245,200,66,0.12);
+            border: 1px solid rgba(245,200,66,0.3);
+            color: var(--gold);
+            font-size: 0.72em;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+            animation: fadeSlideDown 0.8s 0.1s ease both;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        /* ─── Apps grid ─── */
+        .section-title {
+            text-align: center;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 0.8em;
+            letter-spacing: 5px;
+            color: rgba(255,255,255,0.3);
+            padding: 50px 0 30px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 10;
+        }
+
+        .apps-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+            padding: 0 24px 80px;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 32px 28px;
+            width: 300px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.35s cubic-bezier(.22,.68,0,1.2), border-color 0.35s;
+            animation: cardIn 0.7s ease both;
+        }
+
+        .app-card:nth-child(2) { animation-delay: 0.15s; }
+        .app-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(245,200,66,0.3), transparent 50%, rgba(79,163,255,0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .app-card:hover::before { opacity: 1; }
+
+        .app-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(245,200,66,0.25);
+        }
+
+        /* glow spot inside card */
+        .app-card .card-glow {
+            position: absolute;
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            top: -60px; left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+
+        .app-card:hover .card-glow { opacity: 1; }
+
+        .app-icon {
+            width: 80px; height: 80px;
+            border-radius: 18px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .icon-blue  { background: linear-gradient(135deg, #1e3a8a, #3b82f6); box-shadow: 0 8px 24px rgba(59,130,246,0.35); }
+        .icon-green { background: linear-gradient(135deg, #064e3b, #10b981); box-shadow: 0 8px 24px rgba(16,185,129,0.35); }
+        .icon-gold  { background: linear-gradient(135deg, #78350f, #f59e0b); box-shadow: 0 8px 24px rgba(245,158,11,0.35); }
+
+        .app-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 1.05em;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            position: relative; z-index: 1;
+        }
+
+        .app-desc {
+            font-size: 0.88em;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 24px;
+            line-height: 1.7;
+            position: relative; z-index: 1;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #22d87e, #16a85f);
+            color: white;
+            text-decoration: none;
+            padding: 13px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95em;
+            width: 100%;
+            transition: filter 0.3s, transform 0.2s;
+            position: relative; z-index: 1;
+            box-shadow: 0 4px 20px rgba(34,216,126,0.3);
+        }
+
+        .download-btn:hover {
+            filter: brightness(1.15);
+            transform: translateY(-2px);
+        }
+
+        .download-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        /* version tag */
+        .version-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.3);
+            font-size: 0.72em;
+            padding: 3px 10px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+        }
+
+        /* ─── Footer ─── */
+        footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.2);
+            font-size: 0.85em;
+        }
+
+        footer span { color: var(--gold); }
+
+        /* scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.3); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<header>
+    <div class="avatar-ring">
+        <img src="2.jpg" alt="AHMED" class="profile-img">
+    </div>
+
+    <div class="badge">✦ OFFICIAL APK STORE ✦</div>
+
+    <h1 class="store-name">
+        <span class="word-ahmed">STORE</span>
+        <span class="word-store">AHMED</span>
+    </h1>
+
+    <p class="subtitle">مرحباً بك — حمّل تطبيقاتك المفضلة مباشرةً بضغطة واحدة</p>
+</header>
+
+<p class="section-title">— التطبيقات المتاحة —</p>
+
+<main class="apps-container">
+
+    <div class="app-card">
+        <div class="card-glow" style="background: radial-gradient(circle, rgba(59,130,246,0.15), transparent)"></div>
+        <div class="app-icon icon-blue">📱</div>
+        <div class="version-tag">v1.0.0 · APK</div>
+        <h2 class="app-title">تطبيق كذا</h2>
+        <p class="app-desc">وصف قصير للتطبيق يشرح فائدته ومميزاته للمستخدم.</p>
+        <a href="app1.apk" download class="download-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 15V3m0 12-4-4m4 4 4-4"/><path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/>
+            </svg>
+            تحميل APK
+        </a>
+    </div>
+
+    <div class="app-card">
+        <div class="card-glow" style="background: radial-gradient(circle, rgba(16,185,129,0.15), transparent)"></div>
+        <div class="app-icon icon-green">🎮</div>
+        <div class="version-tag">v2.3.1 · APK</div>
+        <h2 class="app-title">لعبة كذا</h2>
+        <p class="app-desc">لعبة ممتعة جداً، حملها الآن وجربها بنفسك.</p>
+        <a href="app2.apk" download class="download-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 15V3m0 12-4-4m4 4 4-4"/><path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/>
+            </svg>
+            تحميل APK
+        </a>
+    </div>
+
+</main>
+
+<footer>
+    <p>جميع الحقوق محفوظة &copy; 2026 — <span>AHMED STORE</span></p>
+</footer>
+
+</body>
+</html>
