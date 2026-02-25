@@ -177,6 +177,9 @@
             line-height: 1.1;
             margin-bottom: 16px;
             animation: fadeUp 0.8s 0.2s ease both;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .word-ahmed {
@@ -207,7 +210,7 @@
             width: 3px;
             height: 0.8em;
             background: var(--gold);
-            margin-right: 6px;
+            margin-left: 6px;
             vertical-align: middle;
             border-radius: 2px;
             animation: blink 1s step-end infinite;
@@ -510,7 +513,6 @@
 <div class="bg-glow-top"></div>
 <div class="bg-glow-bottom"></div>
 
-<!-- ─── HEADER ─── -->
 <header>
     <div class="avatar-wrap">
         <div class="avatar-ring-outer"></div>
@@ -523,7 +525,7 @@
         ✦ OFFICIAL APK STORE ✦
     </div>
 
-    <h1 class="store-name">
+    <h1 class="store-name" dir="ltr">
         <span class="word-ahmed">AHMED</span>
         <span class="word-store">STORE</span>
         <span class="cursor"></span>
@@ -531,7 +533,6 @@
 
     <p class="subtitle">مرحباً بك — حمّل تطبيقاتك المفضلة مباشرةً بضغطة واحدة</p>
 
-    <!-- Mini stats -->
     <div class="stats-bar">
         <div class="stat-item">
             <span class="stat-num">2+</span>
@@ -548,13 +549,10 @@
     </div>
 </header>
 
-<!-- ─── SECTION TITLE ─── -->
 <p class="section-title">— التطبيقات المتاحة —</p>
 
-<!-- ─── APPS ─── -->
 <main class="apps-container">
 
-    <!-- Card 1 -->
     <div class="app-card">
         <div class="card-glow" style="background: radial-gradient(circle, rgba(79,163,255,0.2), transparent)"></div>
         <div class="app-icon icon-blue">⚡</div>
@@ -568,7 +566,6 @@
         </a>
     </div>
 
-    <!-- Card 2 -->
     <div class="app-card">
         <div class="card-glow" style="background: radial-gradient(circle, rgba(16,185,129,0.2), transparent)"></div>
         <div class="app-icon icon-green">🎮</div>
@@ -585,7 +582,6 @@
 
 </main>
 
-<!-- ─── FOOTER ─── -->
 <footer>
     <p>جميع الحقوق محفوظة &copy; 2026 — <span>AHMED STORE</span></p>
 </footer>
