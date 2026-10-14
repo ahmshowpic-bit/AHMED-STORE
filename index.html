@@ -505,6 +505,40 @@
             .app-card { padding: 24px 18px; border-radius: 20px; }
             .app-icon { width: 68px; height: 68px; border-radius: 18px; font-size: 1.8em; }
         }
+
+        /* ─── Windows card extras ─── */
+        .icon-win { background: linear-gradient(145deg, #0b2a5c, #2b8cff); box-shadow: 0 10px 28px rgba(43,140,255,0.4); font-size: 2.2em; }
+
+        .feature-list {
+            list-style: none;
+            text-align: right;
+            margin: 0 0 22px;
+            padding: 0;
+            position: relative; z-index: 1;
+        }
+        .feature-list li {
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.55);
+            padding: 6px 0;
+            line-height: 1.7;
+            border-bottom: 1px dashed rgba(255,255,255,0.06);
+        }
+        .feature-list li:last-child { border-bottom: none; }
+        .feature-list li::before { content: '✔'; color: var(--green); margin-left: 8px; }
+
+        .win-btn { background: linear-gradient(135deg, #2b8cff, #1766d6); box-shadow: 0 4px 22px rgba(43,140,255,0.35); }
+        .win-btn:hover { box-shadow: 0 8px 32px rgba(43,140,255,0.5); }
+
+        .alt-link {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: 0.78em;
+            color: rgba(255,255,255,0.4);
+            text-decoration: underline;
+            position: relative; z-index: 1;
+        }
+        .alt-link:hover { color: var(--gold); }
+        .file-size { font-size: 0.72em; opacity: 0.7; font-weight: 400; }
     </style>
 </head>
 <body>
@@ -535,7 +569,7 @@
 
     <div class="stats-bar">
         <div class="stat-item">
-            <span class="stat-num">2+</span>
+            <span class="stat-num">3+</span>
             <span class="stat-lbl">تطبيق</span>
         </div>
         <div class="stat-item">
@@ -586,11 +620,60 @@
         </a>
     </div>
 
+
+    <!-- ═══ MaintenanceShop (Windows) ═══ -->
+    <div class="app-card">
+        <div class="card-glow" style="background: radial-gradient(circle, rgba(43,140,255,0.2), transparent)"></div>
+        <div class="app-icon icon-win">🛠️</div>
+        <div class="version-tag" id="ms-version">Windows · أحدث إصدار</div>
+        <h2 class="app-title">MAINTENANCE SHOP</h2>
+        <p class="app-desc">برنامج متكامل لإدارة محل الصيانة على ويندوز.</p>
+
+        <!-- عدّل المميزات دي زي ما تحب -->
+        <ul class="feature-list">
+            <li>تسجيل أجهزة العملاء وحالة كل جهاز</li>
+            <li>متابعة أوامر الصيانة من الاستلام للتسليم</li>
+            <li>إدارة العملاء والفواتير والمدفوعات</li>
+            <li>تقارير وإحصائيات للمبيعات والأرباح</li>
+            <li>يعمل بدون إنترنت</li>
+            <li>تثبيت سهل بضغطة واحدة على ويندوز</li>
+        </ul>
+
+        <a id="ms-setup" href="https://github.com/ahmshowpic-bit/AHMED-STORE/releases/latest" class="download-btn win-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 15V3m0 12-4-4m4 4 4-4"/><path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/>
+            </svg>
+            <span>تحميل نسخة التثبيت (Setup)</span>
+            <span class="file-size" id="ms-size"></span>
+        </a>
+    </div>
+
 </main>
 
 <footer>
     <p>جميع الحقوق محفوظة &copy; 2026 — <span>AHMED STORE</span></p>
 </footer>
 
+
+<script>
+/* يجيب أحدث إصدار من GitHub Releases تلقائياً — كل ما ترفع Release جديد الموقع يتحدث لوحده */
+(function () {
+    var REPO = 'ahmshowpic-bit/AHMED-STORE';
+    fetch('https://api.github.com/repos/' + REPO + '/releases/latest')
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (rel) {
+            var setup = null;
+            (rel.assets || []).forEach(function (a) {
+                if (/setup.*\.exe$/i.test(a.name)) setup = a;
+            });
+            if (setup) {
+                document.getElementById('ms-setup').href = setup.browser_download_url;
+                document.getElementById('ms-size').textContent = '(' + (setup.size / 1048576).toFixed(0) + ' MB)';
+            }
+            if (rel.tag_name) document.getElementById('ms-version').textContent = rel.tag_name + ' · Windows';
+        })
+        .catch(function () { /* لو فشل الطلب يفضل الرابط الاحتياطي لصفحة آخر إصدار */ });
+})();
+</script>
 </body>
 </html>
