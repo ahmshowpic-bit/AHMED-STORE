@@ -313,7 +313,10 @@
             overflow: hidden;
             transition: transform 0.4s cubic-bezier(.22,.68,0,1.2), border-color 0.3s, box-shadow 0.3s;
             animation: cardIn 0.7s ease both;
+            display: flex;
+            flex-direction: column;
         }
+        .app-card > .download-btn { margin-top: auto; }
 
         .app-card:nth-child(2) { animation-delay: 0.15s; }
         .app-card:nth-child(3) { animation-delay: 0.3s; }
@@ -507,38 +510,34 @@
         }
 
         /* ─── Windows card extras ─── */
-        .icon-win { background: linear-gradient(145deg, #0b2a5c, #2b8cff); box-shadow: 0 10px 28px rgba(43,140,255,0.4); font-size: 2.2em; }
+        .icon-win {
+            background: linear-gradient(145deg, #1e1b4b, #6d4aff 55%, #2b8cff);
+            box-shadow: 0 10px 28px rgba(109,74,255,0.45);
+        }
+        .icon-win svg { width: 46px; height: 46px; }
 
-        .feature-list {
-            list-style: none;
-            text-align: right;
-            margin: 0 0 22px;
-            padding: 0;
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin: 0 0 18px;
             position: relative; z-index: 1;
         }
-        .feature-list li {
-            font-size: 0.85em;
-            color: rgba(255,255,255,0.55);
-            padding: 6px 0;
-            line-height: 1.7;
-            border-bottom: 1px dashed rgba(255,255,255,0.06);
+        .chips span {
+            font-size: 0.72em;
+            color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 4px 10px;
+            border-radius: 999px;
+            white-space: nowrap;
         }
-        .feature-list li:last-child { border-bottom: none; }
-        .feature-list li::before { content: '✔'; color: var(--green); margin-left: 8px; }
 
         .win-btn { background: linear-gradient(135deg, #2b8cff, #1766d6); box-shadow: 0 4px 22px rgba(43,140,255,0.35); }
         .win-btn:hover { box-shadow: 0 8px 32px rgba(43,140,255,0.5); }
-
-        .alt-link {
-            display: inline-block;
-            margin-top: 14px;
-            font-size: 0.78em;
-            color: rgba(255,255,255,0.4);
-            text-decoration: underline;
-            position: relative; z-index: 1;
-        }
-        .alt-link:hover { color: var(--gold); }
-        .file-size { font-size: 0.72em; opacity: 0.7; font-weight: 400; }
+        .win-btn span { white-space: nowrap; }
+        .file-size { font-size: 0.75em; opacity: 0.75; font-weight: 400; }
     </style>
 </head>
 <body>
@@ -621,29 +620,35 @@
     </div>
 
 
-    <!-- ═══ MaintenanceShop (Windows) ═══ -->
+    <!-- ═══ AhmedPro Repair (Windows) ═══ -->
     <div class="app-card">
-        <div class="card-glow" style="background: radial-gradient(circle, rgba(43,140,255,0.2), transparent)"></div>
-        <div class="app-icon icon-win">🛠️</div>
+        <div class="card-glow" style="background: radial-gradient(circle, rgba(109,74,255,0.22), transparent)"></div>
+        <div class="app-icon icon-win">
+            <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="6" y="8" width="36" height="25" rx="5" stroke-width="2.6"/>
+                <path d="M17 41h14M24 33v8" stroke-width="2.6"/>
+                <g transform="translate(15.5 12.5) scale(0.7)" stroke-width="3">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </g>
+            </svg>
+        </div>
         <div class="version-tag" id="ms-version">Windows · أحدث إصدار</div>
-        <h2 class="app-title">MAINTENANCE SHOP</h2>
-        <p class="app-desc">برنامج متكامل لإدارة محل الصيانة على ويندوز.</p>
+        <h2 class="app-title">AHMEDPRO REPAIR</h2>
+        <p class="app-desc">برنامج إدارة محل الصيانة على ويندوز. عملاء وأجهزة وفواتير في مكان واحد.</p>
 
         <!-- عدّل المميزات دي زي ما تحب -->
-        <ul class="feature-list">
-            <li>تسجيل أجهزة العملاء وحالة كل جهاز</li>
-            <li>متابعة أوامر الصيانة من الاستلام للتسليم</li>
-            <li>إدارة العملاء والفواتير والمدفوعات</li>
-            <li>تقارير وإحصائيات للمبيعات والأرباح</li>
-            <li>يعمل بدون إنترنت</li>
-            <li>تثبيت سهل بضغطة واحدة على ويندوز</li>
-        </ul>
+        <div class="chips">
+            <span>أجهزة العملاء</span>
+            <span>أوامر الصيانة</span>
+            <span>فواتير وتقارير</span>
+            <span>بدون إنترنت</span>
+        </div>
 
         <a id="ms-setup" href="https://github.com/ahmshowpic-bit/AHMED-STORE/releases/latest" class="download-btn win-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 15V3m0 12-4-4m4 4 4-4"/><path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/>
             </svg>
-            <span>تحميل نسخة التثبيت (Setup)</span>
+            <span>تحميل EXE</span>
             <span class="file-size" id="ms-size"></span>
         </a>
     </div>
@@ -664,7 +669,7 @@
         .then(function (rel) {
             var setup = null;
             (rel.assets || []).forEach(function (a) {
-                if (/setup.*\.exe$/i.test(a.name)) setup = a;
+                if (/\.exe$/i.test(a.name) && !setup) setup = a;
             });
             if (setup) {
                 document.getElementById('ms-setup').href = setup.browser_download_url;
