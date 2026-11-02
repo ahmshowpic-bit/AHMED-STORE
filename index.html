@@ -642,7 +642,7 @@
             <span>بدون إنترنت</span>
         </div>
 
-        <a id="ms-setup" href="https://github.com/ahmshowpic-bit/AHMED-STORE/releases/latest" class="download-btn win-btn">
+        <a id="ms-setup" href="https://github.com/ahmshowpic-bit/AHMED-STORE/releases/latest/download/AhmedPro-Repair-Setup.exe" class="download-btn win-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 15V3m0 12-4-4m4 4 4-4"/><path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/>
             </svg>
@@ -673,7 +673,7 @@
                 document.getElementById('ms-setup').href = setup.browser_download_url;
                 document.getElementById('ms-size').textContent = '(' + (setup.size / 1048576).toFixed(0) + ' MB)';
             }
-            if (rel.tag_name) document.getElementById('ms-version').textContent = rel.tag_name + ' · Windows';
+            if (rel.tag_name) document.getElementById('ms-version').textContent = rel.tag_name.replace(/^repair-/, '') + ' · Windows';
         })
         .catch(function () { /* لو فشل الطلب يفضل الرابط الاحتياطي لصفحة آخر إصدار */ });
 })();
