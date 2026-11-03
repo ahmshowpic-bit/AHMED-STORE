@@ -254,37 +254,28 @@ footer b{color:var(--gold);font-weight:600}
 <script>
 (function () {
   /* ═══════════ إعدادات العدّاد ═══════════
-     base = العدد المبدئي (التحميلات اللي حصلت قبل تشغيل العدّاد)
-     الرقم المعروض = base + التحميلات الجديدة المسجّلة من الموقع */
-  var NS = 'ahmed-store-ahmshowpic';
-  var APPS = {
-    repair: { base: 560 },
-    pulse:  { base: 200 },
-    money:  { base: 150 }
-  };
-  var API = 'https://api.counterapi.dev/v1/' + NS + '/';
+     الرقم المعروض = base + عدد التحميلات المسجّل في GitHub Releases.
+     base = الفرق اللي تحب تضيفه فوق عدّاد GitHub (شوف الشرح في الرد). */
   var GH_REPO = 'ahmshowpic-bit/AHMED-STORE';
+  var APPS = {
+    repair: { base: 560, match: /\.exe$/i },
+    pulse:  { base: 200, match: /pulse.*\.apk$/i },
+    money:  { base: 150, match: /money.*\.apk$/i }
+  };
+  var CACHE_KEY = 'ahmedstore:gh:v2', CACHE_MS = 60 * 1000;
 
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fmt = function (n) { return Number(n).toLocaleString('en-US'); };
-  var extra = { repair: 0, pulse: 0, money: 0 };
+  var gh = { repair: 0, pulse: 0, money: 0 };
+  var bump = { repair: 0, pulse: 0, money: 0 };
   var els = { repair: byId('c-repair'), pulse: byId('c-pulse'), money: byId('c-money') };
   var totalEl = byId('total');
 
   function byId(i) { return document.getElementById(i); }
-  function value(k) { return APPS[k].base + extra[k]; }
+  function value(k) { return APPS[k].base + gh[k] + bump[k]; }
   function total() { return value('repair') + value('pulse') + value('money'); }
-
   function safeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function safeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-
-  function timeoutFetch(url, opts, ms) {
-    var ctrl = window.AbortController ? new AbortController() : null;
-    var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, ms);
-    opts = opts || {};
-    if (ctrl) opts.signal = ctrl.signal;
-    return fetch(url, opts).finally(function () { clearTimeout(t); });
-  }
 
   function animate(el, from, to) {
     if (reduce || from === to) { el.textContent = fmt(to); return; }
@@ -292,13 +283,11 @@ footer b{color:var(--gold);font-weight:600}
     function step(ts) {
       if (start === null) start = ts;
       var p = Math.min((ts - start) / dur, 1);
-      var e = 1 - Math.pow(1 - p, 3);
-      el.textContent = fmt(Math.round(from + (to - from) * e));
+      el.textContent = fmt(Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3))));
       if (p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }
-
   function render(animated) {
     Object.keys(els).forEach(function (k) {
       if (animated) animate(els[k], 0, value(k)); else els[k].textContent = fmt(value(k));
@@ -306,43 +295,71 @@ footer b{color:var(--gold);font-weight:600}
     if (animated) animate(totalEl, 0, total()); else totalEl.textContent = fmt(total());
   }
 
-  /* اعرض الأرقام المبدئية فوراً، وبعدها حدّثها بالعدد الحقيقي */
+  /* حوّل رد GitHub لأرقام وروابط */
+  function parse(releases) {
+    var out = { apps: {}, version: '' };
+    Object.keys(APPS).forEach(function (k) { out.apps[k] = { count: 0, url: '', size: 0 }; });
+    releases.forEach(function (rel) {
+      if (rel.draft) return;
+      (rel.assets || []).forEach(function (a) {
+        Object.keys(APPS).forEach(function (k) {
+          if (!APPS[k].match.test(a.name)) return;
+          var o = out.apps[k];
+          o.count += a.download_count || 0;           /* مجموع كل الإصدارات */
+          if (!o.url) { o.url = a.browser_download_url; o.size = a.size; /* أحدث إصدار */
+            if (k === 'repair' && rel.tag_name) out.version = rel.tag_name.replace(/^repair-/, ''); }
+        });
+      });
+    });
+    return out;
+  }
+
+  function apply(data, animated) {
+    Object.keys(APPS).forEach(function (k) {
+      var o = data.apps[k]; gh[k] = o.count;
+      var link = document.querySelector('[data-app="' + k + '"]');
+      if (o.url && link) link.href = o.url;
+    });
+    var r = data.apps.repair;
+    if (r.size) byId('ms-size').textContent = '(' + (r.size / 1048576).toFixed(0) + ' MB)';
+    if (data.version) byId('ms-version').textContent = 'الإصدار ' + data.version;
+    render(animated);
+  }
+
+  /* اعرض الأرقام المبدئية فوراً */
   render(false);
 
-  var reads = Object.keys(APPS).map(function (k) {
-    return timeoutFetch(API + k, null, 4000)
-      .then(function (r) { return r.ok ? r.json() : { count: 0 }; })
-      .then(function (d) { extra[k] = Number(d.count || d.value || 0) || 0; })
-      .catch(function () { extra[k] = 0; });
-  });
-  Promise.all(reads).then(function () { render(true); });
+  var cached = null;
+  try { cached = JSON.parse(safeGet(CACHE_KEY) || 'null'); } catch (e) {}
+  if (cached && Date.now() - cached.t < CACHE_MS) {
+    apply(cached.data, true);
+  } else {
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 6000);
+    fetch('https://api.github.com/repos/' + GH_REPO + '/releases?per_page=100', ctrl ? { signal: ctrl.signal } : {})
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (list) {
+        var data = parse(list);
+        safeSet(CACHE_KEY, JSON.stringify({ t: Date.now(), data: data }));
+        apply(data, true);
+      })
+      .catch(function () { if (cached) apply(cached.data, true); })   /* لو فشل الطلب استخدم آخر نسخة محفوظة */
+      .finally(function () { clearTimeout(timer); });
+  }
 
-  /* تسجيل تحميل جديد — مرة واحدة لكل جهاز لكل برنامج */
+  /* زيادة فورية في الشاشة عند الضغط (GitHub بيسجّل التحميل الحقيقي لوحده) */
   document.querySelectorAll('[data-app]').forEach(function (a) {
     a.addEventListener('click', function () {
       var k = a.getAttribute('data-app');
+      if (a.href.indexOf('github.com') === -1) return;     /* الرابط المحلي مش بيتعدّ */
       var flag = 'ahmedstore:counted:' + k;
       if (safeGet(flag)) return;
       safeSet(flag, '1');
-      extra[k] += 1;
+      bump[k] = 1;
       els[k].textContent = fmt(value(k));
       totalEl.textContent = fmt(total());
-      try { fetch(API + k + '/up', { keepalive: true }).catch(function () {}); } catch (e) {}
     });
   });
-
-  /* أحدث إصدار من GitHub Releases تلقائياً */
-  timeoutFetch('https://api.github.com/repos/' + GH_REPO + '/releases/latest', null, 5000)
-    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(function (rel) {
-      var setup = (rel.assets || []).filter(function (a) { return /\.exe$/i.test(a.name); })[0];
-      if (setup) {
-        byId('ms-setup').href = setup.browser_download_url;
-        byId('ms-size').textContent = '(' + (setup.size / 1048576).toFixed(0) + ' MB)';
-      }
-      if (rel.tag_name) byId('ms-version').textContent = 'الإصدار ' + rel.tag_name.replace(/^repair-/, '');
-    })
-    .catch(function () {});
 })();
 </script>
 </body>
