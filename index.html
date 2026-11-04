@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap" rel="stylesheet">
+<script>document.documentElement.className+=" js"</script>
 <style>
 :root{
   --ink:#f6f4ff; --panel:#ffffff; --panel-2:#f0ecff; --line:#e2dcf7;
@@ -56,6 +57,7 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px
 .btn-line:hover{border-color:var(--violet);background:#f6f3ff}
 .btn-sm{min-height:40px;padding:8px 16px;font-size:.9rem;border-radius:11px}
 .btn small{font-weight:500;opacity:.7;font-size:.8rem}
+#dl-size{direction:ltr;unicode-bidi:isolate;display:inline-block}
 
 /* hero */
 .hero{padding:64px 0 24px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
@@ -144,6 +146,58 @@ footer b{color:var(--violet);font-weight:600}
   .cta .btn{width:100%}
   .band{padding:28px 20px}
 }
+
+/* ───────── showcase: لقطات من البرنامج ───────── */
+.js [data-reveal]{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.js [data-reveal].in{opacity:1;transform:none}
+#screens{padding-top:64px}
+.showcase{position:relative;isolation:isolate}
+.showcase::before{content:"";position:absolute;inset:14% 2% -6%;z-index:-1;filter:blur(46px);
+  background:radial-gradient(55% 60% at 28% 40%,rgba(91,61,240,.30),transparent 70%),radial-gradient(50% 55% at 76% 62%,rgba(47,128,255,.26),transparent 70%),radial-gradient(35% 40% at 55% 100%,rgba(245,179,36,.22),transparent 70%)}
+.sc-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 18px;scrollbar-width:none;scroll-snap-type:x proximity}
+.sc-tabs::-webkit-scrollbar{display:none}
+.sc-tab:first-child{margin-inline-start:auto}.sc-tab:last-child{margin-inline-end:auto}
+.sc-tab{position:relative;overflow:hidden;flex:none;scroll-snap-align:center;font:inherit;font-weight:600;font-size:.92rem;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 18px;cursor:pointer;transition:color .2s,background .2s,border-color .2s,box-shadow .2s}
+.sc-tab:hover{color:var(--violet);border-color:#cfc6f5}
+.sc-tab[aria-selected=true]{color:#fff;background:linear-gradient(135deg,#5b3df0,#2f80ff);border-color:transparent;box-shadow:0 12px 24px -12px rgba(75,53,214,.8)}
+.sc-tab .pg{position:absolute;inset-inline-start:0;bottom:0;height:3px;width:0;background:rgba(255,255,255,.8)}
+@keyframes pg{to{width:100%}}
+.showcase.playing .sc-tab[aria-selected=true] .pg{animation:pg 5.4s linear forwards}
+.showcase.paused .sc-tab .pg{animation-play-state:paused!important}
+.sc-frame{border-radius:16px;background:#fff;border:1px solid #d9d2f2;overflow:hidden;
+  box-shadow:0 44px 80px -44px rgba(60,40,160,.6),0 14px 30px -20px rgba(60,40,160,.4);transition:transform .35s ease-out;will-change:transform}
+.sc-bar{direction:ltr;display:flex;align-items:center;justify-content:space-between;height:34px;padding-left:12px;background:#eeeaff;border-bottom:1px solid #ddd6f6;color:#1b1740;font-size:.78rem;font-weight:600}
+.sc-bar .t{display:flex;align-items:center;gap:8px}
+.sc-bar .t img{width:16px;height:16px;border-radius:4px}
+.sc-bar .t em{font-style:normal;opacity:.6;font-weight:500}
+.sc-bar .wc{display:flex;height:100%;color:#4b4870}
+.sc-bar .wc span{width:44px;display:grid;place-items:center}
+.sc-bar .wc svg{width:10px;height:10px}
+.sc-stage{position:relative;aspect-ratio:1152/801;background:#f4f6fb;overflow:hidden}
+.sc-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.025);transition:opacity .6s ease,transform 1s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.sc-stage img.on{opacity:1;transform:none}
+.sc-open{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;cursor:zoom-in;z-index:2}
+.sc-hint{position:absolute;inset-inline-end:14px;bottom:14px;z-index:3;display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;color:#fff;background:rgba(27,23,64,.72);backdrop-filter:blur(6px);padding:6px 12px;border-radius:999px;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s;pointer-events:none}
+.sc-hint svg{width:14px;height:14px}
+.sc-frame:hover .sc-hint,.sc-open:focus-visible~.sc-hint{opacity:1;transform:none}
+.sc-cap{text-align:center;margin:20px auto 0;max-width:62ch;color:var(--muted);min-height:3.6em;transition:opacity .25s,transform .25s}
+.sc-cap.swap{opacity:0;transform:translateY(6px)}
+.sc-cap b{display:block;color:var(--text);font-size:1.08rem;margin-bottom:2px}
+.sc-priv{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:6px;font-size:.8rem;color:var(--muted)}
+.sc-priv svg{width:14px;height:14px;color:var(--mint)}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(18,12,48,.86);backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px;animation:lbin .25s ease}
+.lb[hidden]{display:none}
+@keyframes lbin{from{opacity:0}to{opacity:1}}
+.lb-scroll{width:min(1152px,100%);max-height:100%;overflow:auto;border-radius:14px;box-shadow:0 40px 90px -30px #000;background:#fff;-webkit-overflow-scrolling:touch}
+.lb img{display:block;width:100%;min-width:900px;height:auto}
+@media (min-width:960px){.lb img{min-width:0}}
+.lb-x{position:absolute;top:14px;inset-inline-start:14px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:#1b1740;font-size:1.6rem;line-height:1;cursor:pointer;box-shadow:0 8px 20px -8px #000}
+@media (max-width:600px){
+  .sc-tab{padding:7px 14px;font-size:.86rem}
+  .sc-bar{height:28px}.sc-bar .wc span{width:34px}
+  .sc-hint{display:none}
+}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
@@ -152,7 +206,7 @@ footer b{color:var(--violet);font-weight:600}
 <nav>
   <div class="wrap">
     <a class="logo" href="#top" dir="ltr"><img src="ahmedpro-icon.png?v=2" alt="" width="30" height="30"><span>AHMEDPRO</span> REPAIR</a>
-    <div class="links"><a href="#features">المميزات</a><a href="#how">طريقة التفعيل</a><a href="#faq">أسئلة شائعة</a><a href="#apps">تطبيقات أخرى</a></div>
+    <div class="links"><a href="#screens">لقطات</a><a href="#features">المميزات</a><a href="#how">طريقة التفعيل</a><a href="#faq">أسئلة شائعة</a><a href="#apps">تطبيقات أخرى</a></div>
     <a class="btn btn-wa btn-sm" data-wa="أهلاً، عايز أعرف أكتر عن برنامج AHMEDPRO REPAIR" href="#">واتساب</a>
   </div>
 </nav>
@@ -184,6 +238,47 @@ footer b{color:var(--violet);font-weight:600}
       <a class="btn btn-wa hc-card-btn" data-wa="أهلاً، عايز أسأل عن أسعار برنامج AHMEDPRO REPAIR" href="#">اسأل عن الأسعار</a>
     </aside>
   </div>
+
+  <section id="screens" aria-labelledby="screens-title">
+    <div class="eyebrow">من جوه البرنامج</div>
+    <h2 class="title" id="screens-title">دي شاشات البرنامج الحقيقية</h2>
+    <p class="sub">لقطات من نسخة شغّالة في محل فعلي، وبيانات العملاء مغطّاة حفاظاً على خصوصيتهم.</p>
+
+    <div class="showcase" id="showcase" data-reveal>
+      <div class="sc-tabs" role="tablist" aria-label="أقسام البرنامج">
+        <button class="sc-tab" role="tab" id="sc-t0" aria-controls="sc-panel" aria-selected="true">الرئيسية<i class="pg"></i></button>
+        <button class="sc-tab" role="tab" id="sc-t1" aria-controls="sc-panel" aria-selected="false" tabindex="-1">الصيانة<i class="pg"></i></button>
+        <button class="sc-tab" role="tab" id="sc-t2" aria-controls="sc-panel" aria-selected="false" tabindex="-1">المخزون<i class="pg"></i></button>
+        <button class="sc-tab" role="tab" id="sc-t3" aria-controls="sc-panel" aria-selected="false" tabindex="-1">التقارير<i class="pg"></i></button>
+        <button class="sc-tab" role="tab" id="sc-t4" aria-controls="sc-panel" aria-selected="false" tabindex="-1">قفل الرمز<i class="pg"></i></button>
+        <button class="sc-tab" role="tab" id="sc-t5" aria-controls="sc-panel" aria-selected="false" tabindex="-1">الصلاحيات<i class="pg"></i></button>
+      </div>
+
+      <div class="sc-frame" id="sc-frame">
+        <div class="sc-bar" aria-hidden="true">
+          <div class="t"><img src="ahmedpro-icon.png?v=2" alt="" width="16" height="16"><span>AHMEDPRO REPAIR</span><em id="sc-bar-t">الرئيسية</em></div>
+          <div class="wc">
+            <span><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M0 5h10"/></svg></span>
+            <span><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><rect x=".5" y=".5" width="9" height="9"/></svg></span>
+            <span><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M0 0l10 10M10 0L0 10"/></svg></span>
+          </div>
+        </div>
+        <div class="sc-stage" id="sc-panel" role="tabpanel" aria-labelledby="sc-t0">
+          <img class="on" src="screens/02-home.webp" width="1152" height="801" alt="الشاشة الرئيسية: الدرج والأرباح وقيمة المخزون ومستحقات الموردين وحالة أجهزة الصيانة">
+          <img src="screens/04-maintenance.webp" width="1152" height="801" loading="lazy" alt="لوحة الصيانة بثلاث حالات: تحت الصيانة وجاهز وتم التسليم">
+          <img src="screens/03-inventory.webp" width="1152" height="801" loading="lazy" alt="شاشة المخزون بالكميات والأسعار وحالة كل قطعة">
+          <img src="screens/05-reports.webp" width="1152" height="801" loading="lazy" alt="شاشة التقارير بالأرباح والفواتير ورسم بياني يوم بيوم">
+          <img src="screens/01-lock.webp" width="1152" height="801" loading="lazy" alt="شاشة قفل البرنامج بكود من أربعة أرقام">
+          <img src="screens/06-roles.webp" width="1152" height="801" loading="lazy" alt="وضع المدير ووضع الفني في قفل البرنامج">
+          <button class="sc-open" type="button" aria-label="تكبير اللقطة"></button>
+          <span class="sc-hint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4M11 8v6M8 11h6"/></svg>اضغط للتكبير</span>
+        </div>
+      </div>
+
+      <p class="sc-cap" id="sc-cap" aria-live="polite"><b></b><span></span></p>
+      <p class="sc-priv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>أسماء العملاء وأرقام تليفوناتهم مغطّاة في كل اللقطات</p>
+    </div>
+  </section>
 
   <section id="features">
     <div class="eyebrow">المميزات</div>
@@ -273,6 +368,11 @@ footer b{color:var(--violet);font-weight:600}
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.95L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Zm5.8 14.1c-.25.7-1.45 1.35-2 1.4-.5.05-1.15.07-1.85-.12a10.6 10.6 0 0 1-4.6-3.1 8.4 8.4 0 0 1-1.8-3.2c-.1-.9.4-1.6 1-1.9.2-.1.45-.1.6.1l.9 2c.1.2 0 .45-.1.6l-.4.5c-.15.15-.1.4.05.6a7 7 0 0 0 2.6 2.4c.25.1.45.1.6-.1l.6-.8c.15-.2.35-.25.55-.15l1.9.9c.2.1.3.2.3.4.05.3 0 .7-.35 1.45Z"/></svg>
 </a>
 
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="عرض اللقطة بحجم كبير">
+  <button class="lb-x" type="button" aria-label="إغلاق">×</button>
+  <div class="lb-scroll"><img id="lb-img" alt=""></div>
+</div>
+
 <script>
 (function () {
   /* ═══ غيّر رقم الواتساب هنا (بصيغة دولية بدون + ولا مسافات، مثال مصر: 201012345678) ═══ */
@@ -298,6 +398,103 @@ footer b{color:var(--violet);font-weight:600}
         break;
       }
     }).catch(function () {});
+})();
+
+/* ═══ معرض لقطات البرنامج ═══ */
+(function () {
+  var root = document.getElementById('showcase'); if (!root) return;
+  var tabs = [].slice.call(root.querySelectorAll('[role=tab]'));
+  var imgs = [].slice.call(root.querySelectorAll('.sc-stage img'));
+  var panel = document.getElementById('sc-panel'), cap = document.getElementById('sc-cap');
+  var barT = document.getElementById('sc-bar-t'), frame = document.getElementById('sc-frame');
+  var capB = cap.querySelector('b'), capS = cap.querySelector('span');
+  var DATA = [
+    ['الرئيسية', 'كل أرقام محلك في شاشة واحدة: الدرج والأرباح وقيمة المخزون ومستحقات الموردين، وتنبيهات القطع اللي خلصت.'],
+    ['الصيانة', 'لوحة أجهزة بحالاتها: تحت الصيانة، جاهز، تم التسليم. وبضغطة تبلّغ العميل على واتساب.'],
+    ['المخزون', 'كمية كل قطعة وسعر الجملة والبيع، وتنبيه فوري لما تقل أو تخلص، مع الموديلات المتوافقة.'],
+    ['التقارير', 'تقرير أي فترة بالفواتير والأرباح ورسم يوم بيوم. صدّره PDF أو Excel أو ابعته واتساب.'],
+    ['قفل الرمز', 'البرنامج بيتقفل بكود من 4 أرقام عند كل تشغيل، وبياناتك مشفّرة على جهازك.'],
+    ['الصلاحيات', 'وضع المدير بصلاحيات كاملة، ووضع الفني بيخفي الدرج والأرباح والتقارير والإعدادات.']
+  ];
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cur = 0, auto = !reduce, inView = false, hover = false;
+
+  function sync() {
+    var run = auto && inView && !document.hidden;
+    root.classList.toggle('playing', auto);
+    root.classList.toggle('paused', !run || hover);
+  }
+  function show(i, user) {
+    i = (i + tabs.length) % tabs.length;
+    if (user) { auto = false; }
+    cur = i;
+    tabs.forEach(function (t, k) {
+      var on = k === i;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    imgs.forEach(function (im, k) { im.classList.toggle('on', k === i); });
+    panel.setAttribute('aria-labelledby', tabs[i].id);
+    barT.textContent = DATA[i][0];
+    cap.classList.add('swap');
+    setTimeout(function () { capB.textContent = DATA[i][0]; capS.textContent = DATA[i][1]; cap.classList.remove('swap'); }, 160);
+    var t = tabs[i], box = t.parentNode;
+    if (box.scrollWidth > box.clientWidth) box.scrollTo({ left: t.offsetLeft - (box.clientWidth - t.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
+    sync();
+  }
+  capB.textContent = DATA[0][0]; capS.textContent = DATA[0][1];
+
+  tabs.forEach(function (t, k) {
+    t.addEventListener('click', function () { show(k, true); });
+    t.addEventListener('keydown', function (e) {
+      var d = { ArrowLeft: 1, ArrowRight: -1 }[e.key];
+      if (d) { e.preventDefault(); show(cur + d, true); tabs[cur].focus(); }
+      else if (e.key === 'Home') { e.preventDefault(); show(0, true); tabs[0].focus(); }
+      else if (e.key === 'End') { e.preventDefault(); show(tabs.length - 1, true); tabs[cur].focus(); }
+    });
+  });
+  root.addEventListener('animationend', function (e) { if (e.animationName === 'pg' && auto) show(cur + 1, false); });
+  root.addEventListener('mouseenter', function () { hover = true; sync(); });
+  root.addEventListener('mouseleave', function () { hover = false; sync(); });
+  document.addEventListener('visibilitychange', sync);
+
+  /* ظهور تدريجي + تشغيل تلقائي وهو ظاهر على الشاشة */
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) root.classList.add('in'); inView = e.isIntersecting; sync(); });
+    }, { threshold: .35 }).observe(root);
+  } else { root.classList.add('in'); inView = true; sync(); }
+
+  /* سحب على الموبايل */
+  var x0 = null;
+  panel.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  panel.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 45) show(cur + (dx > 0 ? 1 : -1), true);
+  }, { passive: true });
+
+  /* ميلان خفيف مع الماوس */
+  if (!reduce && window.matchMedia('(hover:hover)').matches) {
+    frame.addEventListener('pointermove', function (e) {
+      var r = frame.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5;
+      frame.style.transform = 'perspective(1400px) rotateY(' + (px * 3) + 'deg) rotateX(' + (-py * 2.4) + 'deg)';
+    });
+    frame.addEventListener('pointerleave', function () { frame.style.transform = ''; });
+  }
+
+  /* تكبير اللقطة */
+  var lb = document.getElementById('lb'), lbImg = document.getElementById('lb-img'), opener = null;
+  function openLb() {
+    opener = document.activeElement; lbImg.src = imgs[cur].src; lbImg.alt = imgs[cur].alt;
+    lb.hidden = false; document.body.style.overflow = 'hidden'; lb.querySelector('.lb-x').focus();
+  }
+  function closeLb() { lb.hidden = true; document.body.style.overflow = ''; if (opener) opener.focus(); }
+  root.querySelector('.sc-open').addEventListener('click', openLb);
+  lb.addEventListener('click', function (e) { if (e.target === lb || e.target.className === 'lb-x') closeLb(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+  sync();
 })();
 </script>
 </body>
